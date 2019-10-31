@@ -33,7 +33,7 @@ import {
 } from "@chakra-ui/core";
 import { css } from "@emotion/core";
 import createPersistedState from "use-persisted-state";
-import { FiEdit3, FiTwitter } from "react-icons/fi";
+import { FiEdit3, FiTwitter, FiCoffee } from "react-icons/fi";
 import { format } from "number-currency-format";
 import { NextSeo } from "next-seo";
 
@@ -426,11 +426,20 @@ export default () => {
               </Text>
 
               <Text mt={2}>
-                Semoga alat ini bisa membantu, dan apabila ada saran/keluhan,
-                saya bisa dihubungi di{" "}
+                Semoga alat ini bisa membantu.{" "}
+                <Link
+                  href="https://github.com/mathdroid/cashbacc"
+                  isExternal
+                  mr={2}
+                >
+                  Kode Sumber <Icon name="external-link" ml="2px" />
+                </Link>{" "}
+                dapat dilihat di tautan. Apabila ada saran/keluhan, saya bisa
+                dihubungi di{" "}
                 <Link href="https://twitter.com/mathdroid" isExternal>
                   sini <Icon name="external-link" mx="2px" />
                 </Link>
+                .
               </Text>
 
               <Text mt={2}>Ttd,</Text>
@@ -447,13 +456,18 @@ export default () => {
 
             <ModalFooter>
               <Flex flexDirection="row" alignItems="center">
-                <Link
-                  href="https://github.com/mathdroid/cashbacc"
-                  isExternal
+                <Button
+                  leftIcon={FiCoffee}
+                  variant="outline"
                   mr={2}
+                  onClick={() => {
+                    gtag.event({
+                      action: "add_to_cart"
+                    });
+                  }}
                 >
-                  Source Code <Icon name="external-link" ml="2px" />
-                </Link>
+                  <Link href="https://karyakarsa.com/mathdroid">Donasi</Link>
+                </Button>
                 <Button
                   leftIcon={FiTwitter}
                   variant="outline"
