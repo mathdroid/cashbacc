@@ -16,7 +16,20 @@ import {
   EditableInput,
   Badge,
   CloseButton,
-  ListItem
+  ListItem,
+  useColorMode,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  Avatar,
+  Link,
+  Icon
 } from "@chakra-ui/core";
 import { css } from "@emotion/core";
 import createPersistedState from "use-persisted-state";
@@ -56,6 +69,7 @@ const ProviderCard = ({
   isCheapest
 }) => {
   const [currentInputName, setCurrentInputName] = useState(name);
+  const { colorMode } = useColorMode();
   const onChangeName = value => {
     setCurrentInputName(value);
   };
@@ -78,15 +92,34 @@ const ProviderCard = ({
     <Stack
       m={2}
       p={4}
-      boxShadow="0 4px 32px 32px rgba(64,64,64,0.05)"
+      boxShadow={
+        colorMode === "light"
+          ? `0 ${isCheapest ? "8px" : "4px"} 32px 32px ${
+              isCheapest ? "rgba(28, 69, 50, 0.1)" : "rgba(64,64,64,0.05)"
+            }`
+          : "none"
+      }
       borderRadius={8}
       width="12rem"
       height="12rem"
       alignItems="center"
       justifyContent="space-between"
-      bg={isCheapest ? "green.50" : "white"}
+      bg={
+        colorMode === "light" ? (isCheapest ? "green.50" : "white") : "gray.900"
+      }
       position="relative"
+      transition="all ease-in-out 0.2s"
       top={isCheapest ? "-8px" : "0"}
+      color={colorMode === "light" ? "black" : "gray.50"}
+      borderColor={
+        colorMode === "light"
+          ? "transparent"
+          : isCheapest
+          ? "green.400"
+          : "white"
+      }
+      borderStyle="solid"
+      borderWidth="1px"
     >
       <CloseButton onClick={onClose} alignSelf="flex-start" />
       <Editable
@@ -152,24 +185,36 @@ const ProviderCard = ({
   );
 };
 
-const AddProviderButton = ({ onClick }) => (
-  <Flex
-    flexDirection="column"
-    border="dashed 1px"
-    borderColor="black.200"
-    minWidth="12rem"
-    minHeight="12rem"
-    borderRadius={8}
-    alignItems="center"
-    justifyContent="center"
-    mx={2}
-  >
-    <IconButton aria-label="Tambah provider" icon="add" onClick={onClick} />
-    <Text textAlign="center" mt={2}>
-      Tambah provider
-    </Text>
-  </Flex>
-);
+const AddProviderButton = ({ onClick }) => {
+  const { colorMode } = useColorMode();
+  const borderColor = { light: "gray.500", dark: "gray.50" };
+  const color = { light: "black", dark: "gray.50" };
+  const variant = { light: "solid", dark: "ghost" };
+  return (
+    <Flex
+      flexDirection="column"
+      border="dashed 1px"
+      borderColor={borderColor[colorMode]}
+      minWidth="12rem"
+      minHeight="12rem"
+      borderRadius={8}
+      alignItems="center"
+      justifyContent="center"
+      mx={2}
+      color={color[colorMode]}
+    >
+      <IconButton
+        variant={variant[colorMode]}
+        aria-label="Tambah provider"
+        icon="add"
+        onClick={onClick}
+      />
+      <Text textAlign="center" mt={2}>
+        Tambah provider
+      </Text>
+    </Flex>
+  );
+};
 
 const INITIAL_PRE_DISCOUNT = 0;
 const INITIAL_PROVIDERS = [];
@@ -278,6 +323,9 @@ export default () => {
     removeProvider
   } = useMaxDiscountAmount();
 
+  const { colorMode, toggleColorMode } = useColorMode();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const onChangePreDiscount = raw => {
     const value = parseInt(raw, 10);
     setPreDiscount(() => (value ? value : 0));
@@ -287,17 +335,96 @@ export default () => {
     <Flex
       minHeight="100vh"
       width="100%"
-      bgColor="brand.400"
       flexDirection="row"
       justifyContent="center"
       bg="brand.400"
     >
       <Flex
+        as="header"
+        width="32rem"
+        maxWidth="100vw"
+        position="fixed"
+        top="0"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="flex-end"
+      >
+        <IconButton
+          aria-label="Ganti mode warna"
+          icon={colorMode === "light" ? "moon" : "sun"}
+          variant="ghost"
+          onClick={toggleColorMode}
+        />
+        <IconButton
+          aria-label="Informasi"
+          icon="info-outline"
+          variant="ghost"
+          onClick={onOpen}
+        />
+      </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent color={colorMode === "light" ? "black" : "gray.50"}>
+          <ModalHeader>Cashbacc App</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody display="flex" flexDirection="column">
+            <Text fontWeight="bold" mb="1rem">
+              Terimakasih untuk menggunakan Cashbacc!
+            </Text>
+            <Text>
+              Saya membuat Cashbacc karena banyaknya promosi cashback dari
+              berbagai merk pembayaran elektronik dengan jumlah total yang agak
+              membingungkan 😅 40% dengan maks 10000, 25% maks 12500, dll.
+            </Text>
+
+            <Text mt={2}>
+              Dengan aplikasi ini kita dapat membandingkan berbagai promo
+              tersebut dan mendapatkan jumlah promosi terbesar, tanpa
+              repot-repot menghitung 😇
+            </Text>
+
+            <Text mt={2}>
+              Semoga alat ini bisa membantu, dan apabila ada saran/keluhan, saya
+              bisa dihubungi di{" "}
+              <Link href="https://twitter.com/mathdroid" isExternal>
+                sini <Icon name="external-link" mx="2px" />
+              </Link>
+            </Text>
+
+            <Text mt={2}>Ttd,</Text>
+            <Text mt={4} fontWeight="bold">
+              mathdroid
+            </Text>
+            <Avatar
+              alignSelf="flex-end"
+              size="xl"
+              name="Muhammad Mustadi"
+              src="/image/photo.jpg"
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Flex flexDirection="row" alignItems="center">
+              <Link
+                href="https://github.com/mathdroid/cashbacc"
+                isExternal
+                mr={2}
+              >
+                Source Code <Icon name="external-link" mx="2px" />
+              </Link>
+              <Button variantColor="gray" onClick={onClose}>
+                Tutup
+              </Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Flex
         as="main"
         maxWidth="100vw"
         width="32rem"
         flexDirection="column"
-        bg="white"
+        bg={colorMode === "light" ? "white" : "gray.900"}
         border="black.400"
         boxShadow="0 0 16px 16px rgba(64,64,64,0.1)"
       >
@@ -306,7 +433,12 @@ export default () => {
           alignItems="center"
           justifyContent="center"
           height="40vh"
-          background="radial-gradient(circle at bottom, #f0fff4, #c6f6d5, #9ae6b4)"
+          background={
+            colorMode === "light"
+              ? "radial-gradient(circle at bottom, #f0fff4, #c6f6d5, #9ae6b4)"
+              : "radial-gradient(circle at bottom, #2D3748, #1A202C, #171923)"
+          }
+          color={colorMode === "light" ? "black" : "gray.50"}
         >
           <Flex
             as="article"
@@ -427,13 +559,19 @@ export default () => {
           width="32rem"
           maxWidth="100vw"
           height="6rem"
-          bg="white"
+          bg={colorMode === "light" ? "white" : "gray.900"}
+          color={colorMode === "light" ? "black" : "gray.50"}
           position="fixed"
           bottom="0"
           p={2}
-          bg="white"
-          boxShadow="0 0 16px 8px rgba(64,64,64,0.1)"
-          borderRadius={8}
+          boxShadow={
+            colorMode === "light" ? "0 0 16px 8px rgba(64,64,64,0.1)" : "none"
+          }
+          borderRadius="8px 8px 0 0"
+          borderStyle="solid"
+          borderWidth="1px"
+          borderColor={colorMode === "light" ? "transparent" : "white"}
+          borderBottomColor="transparent"
         >
           <Stack spacing={2}>
             <Text

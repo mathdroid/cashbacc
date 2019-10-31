@@ -1,5 +1,5 @@
 import App from "next/app";
-import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 
 import theme from "../theme";
 
@@ -9,7 +9,9 @@ class EnhancedApp extends App {
     return (
       <ThemeProvider theme={theme}>
         <CSSReset />
-        <Component />
+        <ColorModeProvider>
+          <Component />
+        </ColorModeProvider>
       </ThemeProvider>
     );
   }
