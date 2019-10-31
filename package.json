@@ -1,0 +1,22 @@
+{
+  "name": "cashback-calculator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export"
+  },
+  "dependencies": {
+    "@chakra-ui/core": "^0.4.1",
+    "@emotion/core": "^10.0.22",
+    "@emotion/styled": "^10.0.23",
+    "emotion-theming": "^10.0.19",
+    "next": "latest",
+    "next-offline": "4.0.6",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "serve": "11.2.0"
+  }
+}
