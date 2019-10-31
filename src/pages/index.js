@@ -33,7 +33,7 @@ import {
 } from "@chakra-ui/core";
 import { css } from "@emotion/core";
 import createPersistedState from "use-persisted-state";
-import { FiEdit3 } from "react-icons/fi";
+import { FiEdit3, FiTwitter } from "react-icons/fi";
 import { format } from "number-currency-format";
 import { NextSeo } from "next-seo";
 
@@ -287,15 +287,16 @@ const useMaxDiscountAmount = (
   }, [providers, preDiscount]);
 
   const addNewProvider = useCallback(() => {
+    const isNameExist = n => providers.some(p => p.name === n);
     const getNewName = (run = 0) => {
       const newName =
-        RANDOM_NAMES[Math.round(Math.random() * RANDOM_NAMES.length) - 1];
-
-      return providers.some(p => p.name === newName)
-        ? run <= 3
-          ? getNewName(run + 1)
-          : `${newName}2`
-        : newName;
+        RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
+      const backupName = `${newName}${run}`;
+      return !isNameExist(newName)
+        ? newName
+        : !isNameExist(backupName)
+        ? backupName
+        : getNewName(run + 1);
     };
     const newProvider = {
       name: getNewName(),
@@ -365,7 +366,7 @@ export default () => {
         width="100%"
         flexDirection="row"
         justifyContent="center"
-        bg="brand.400"
+        bg={colorMode === "light" ? "gray.100" : "gray.800"}
       >
         <Flex
           as="header"
@@ -439,8 +440,11 @@ export default () => {
                   isExternal
                   mr={2}
                 >
-                  Source Code <Icon name="external-link" mx="2px" />
+                  Source Code <Icon name="external-link" ml="2px" />
                 </Link>
+                <Button leftIcon={FiTwitter} variant="outline" mr={2}>
+                  <Link href="https://twitter.com/intent/tweet?text=He attacc, he protecc, but most importantly, he calculate cashbacc&url=https://makantuhdiskon.com&via=mathdroid">Tweet</Link>
+                </Button>
                 <Button variantColor="gray" onClick={onClose}>
                   Tutup
                 </Button>
@@ -455,7 +459,9 @@ export default () => {
           flexDirection="column"
           bg={colorMode === "light" ? "white" : "gray.900"}
           border="black.400"
-          boxShadow="0 0 16px 16px rgba(64,64,64,0.1)"
+          boxShadow={
+            colorMode === "light" ? "0 0 16px 16px rgba(64,64,64,0.1)" : "none"
+          }
         >
           <Flex
             as="section"
