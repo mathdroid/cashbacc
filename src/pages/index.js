@@ -69,7 +69,8 @@ const ProviderCard = ({
   maxDiscountAmount,
   updateProvider,
   onClose,
-  isCheapest
+  isCheapest,
+  preDiscount
 }) => {
   const [currentInputName, setCurrentInputName] = useState(name);
   const { colorMode } = useColorMode();
@@ -104,7 +105,7 @@ const ProviderCard = ({
       }
       borderRadius={8}
       width="12rem"
-      height="12rem"
+      minHeight="12rem"
       alignItems="center"
       justifyContent="space-between"
       bg={
@@ -162,7 +163,12 @@ const ProviderCard = ({
         />
         <EditableInput textAlign="center" />
       </Editable>
-
+      <Badge variantColor={isCheapest ? "green" : "gray"}>
+        {Math.min(
+          maxDiscountAmount,
+          Math.round((discountPercentage * preDiscount) / 100)
+        )}
+      </Badge>
       <Editable
         value={maxDiscountAmount}
         onChange={onChangeMaxDiscount}
@@ -181,6 +187,7 @@ const ProviderCard = ({
         />
         <EditableInput textAlign="center" />
       </Editable>
+
       <Text fontSize="0.5rem" fontWeight="bold" opacity="0.5">
         (tekan nama/angka untuk edit)
       </Text>
@@ -622,6 +629,7 @@ export default () => {
                   onClose={() => {
                     removeProvider(i);
                   }}
+                  preDiscount={preDiscount}
                 />
               </ListItem>
             ))}
