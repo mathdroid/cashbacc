@@ -15,8 +15,11 @@
     "emotion-theming": "^10.0.19",
     "next": "latest",
     "next-offline": "4.0.6",
+    "number-currency-format": "^1.0.10",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "serve": "11.2.0"
+    "react-icons": "^3.8.0",
+    "serve": "11.2.0",
+    "use-persisted-state": "^0.3.0"
   }
 }

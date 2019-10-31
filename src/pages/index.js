@@ -14,23 +14,53 @@ import {
   Editable,
   EditablePreview,
   EditableInput,
-  Badge
+  Badge,
+  CloseButton,
+  ListItem
 } from "@chakra-ui/core";
 import { css } from "@emotion/core";
+import createPersistedState from "use-persisted-state";
+import { FiEdit3 } from "react-icons/fi";
+import { format } from "number-currency-format";
+
+const usePreDiscountState = createPersistedState("prediscount");
+const useProvidersState = createPersistedState("providers");
+const useDiscountState = createPersistedState("discount");
+
+const RANDOM_NAMES = [
+  "AVA",
+  "IVI",
+  "UVU",
+  "EVE",
+  "ONO",
+  "Ga-Pay",
+  "No-Pay",
+  "Lo-Pay",
+  "Go-vo",
+  "Nana",
+  "PayAja",
+  "NeverPay",
+  "Baby-Pay",
+  "Shark-Pay",
+  "SKYNET-Pay",
+  "TemanBayar",
+  "UangAjaib"
+];
 
 const ProviderCard = ({
   name,
   discountPercentage,
   maxDiscountAmount,
   updateProvider,
+  onClose,
   isCheapest
 }) => {
-  const [currentName, setCurrentName] = useState(name);
+  const [currentInputName, setCurrentInputName] = useState(name);
   const onChangeName = value => {
-    setCurrentName(value);
+    setCurrentInputName(value);
   };
   const onSubmitName = () => {
-    updateProvider({ name: currentName });
+    updateProvider({ name: currentInputName });
   };
   const onChangeMaxDiscount = raw => {
     const value = parseInt(raw);
@@ -41,7 +71,7 @@ const ProviderCard = ({
   const onChangeDiscountPercentage = raw => {
     const value = parseInt(raw);
     updateProvider({
-      discountPercentage: value ? value : 0
+      discountPercentage: value ? Math.min(value, 100) : 0
     });
   };
   return (
@@ -50,59 +80,96 @@ const ProviderCard = ({
       p={4}
       boxShadow="0 4px 32px 32px rgba(64,64,64,0.05)"
       borderRadius={8}
-      minWidth="12rem"
-      minHeight="12rem"
+      width="12rem"
+      height="12rem"
       alignItems="center"
       justifyContent="space-between"
       bg={isCheapest ? "green.50" : "white"}
+      position="relative"
+      top={isCheapest ? "-8px" : "0"}
     >
+      <CloseButton onClick={onClose} alignSelf="flex-start" />
       <Editable
-        value={currentName}
+        placeholder="Ganti nama"
+        value={name}
         onChange={onChangeName}
         onSubmit={onSubmitName}
-        mt={4}
+        mt="-40px"
+        height="32px"
       >
         <EditablePreview
           textAlign="center"
           as="h2"
           fontSize="md"
           fontWeight="bold"
+          verticalAlign="middle"
         />
-        <EditableInput />
+        <EditableInput textAlign="center" value={currentInputName} />
       </Editable>
 
       <Editable
+        placeholder="Ganti besar diskon"
         value={discountPercentage}
         onChange={onChangeDiscountPercentage}
       >
         <EditablePreview
           textAlign="center"
           as="h3"
-          fontSize="6xl"
+          fontSize="5xl"
           fontWeight="bold"
           css={css`
             &:after {
+              opacity: 0.5;
               content: "%";
             }
           `}
         />
-        <EditableInput />
+        <EditableInput textAlign="center" />
       </Editable>
 
-      <Editable value={maxDiscountAmount} onChange={onChangeMaxDiscount}>
+      <Editable
+        value={maxDiscountAmount}
+        onChange={onChangeMaxDiscount}
+        placeholder="Ganti diskon maksimal"
+      >
         <EditablePreview
           fontSize="sm"
+          fontWeight="bold"
           css={css`
             &:before {
+              font-weight: normal;
+              opacity: 0.5;
               content: "maks. ";
             }
           `}
         />
-        <EditableInput />
+        <EditableInput textAlign="center" />
       </Editable>
+      <Text fontSize="0.5rem" fontWeight="bold" opacity="0.5">
+        (tekan nama/angka untuk edit)
+      </Text>
     </Stack>
   );
 };
+
+const AddProviderButton = ({ onClick }) => (
+  <Flex
+    flexDirection="column"
+    border="dashed 1px"
+    borderColor="black.200"
+    minWidth="12rem"
+    minHeight="12rem"
+    borderRadius={8}
+    alignItems="center"
+    justifyContent="center"
+    mx={2}
+  >
+    <IconButton aria-label="Tambah provider" icon="add" onClick={onClick} />
+    <Text textAlign="center" mt={2}>
+      Tambah provider
+    </Text>
+  </Flex>
+);
 
 const INITIAL_PRE_DISCOUNT = 0;
 const INITIAL_PROVIDERS = [];
@@ -112,14 +179,14 @@ const useMaxDiscountAmount = (
   initialPreDiscount = INITIAL_PRE_DISCOUNT,
   initialProviders = INITIAL_PROVIDERS
 ) => {
-  const [preDiscount, setPreDiscount] = useState(initialPreDiscount);
-  const [providers, setProviders] = useState(initialProviders);
+  const [preDiscount, setPreDiscount] = usePreDiscountState(initialPreDiscount);
+  const [providers, setProviders] = useProvidersState(initialProviders);
 
   const getDiscountAmount = useCallback(
     ({ discountPercentage, maxDiscountAmount }) => {
       return Math.min(
         maxDiscountAmount,
-        (discountPercentage * preDiscount) / 100
+        Math.round((discountPercentage * preDiscount) / 100)
       );
     },
     [preDiscount]
@@ -136,7 +203,7 @@ const useMaxDiscountAmount = (
       : prev;
   };
 
-  const [{ amount, index }, setMaxDiscountAmount] = useState(() => {
+  const [{ amount, index }, setMaxDiscountAmount] = useDiscountState(() => {
     return providers.reduce(maxDiscountAmountReducer, INITIAL_MAX_AMOUNT);
   });
 
@@ -149,8 +216,18 @@ const useMaxDiscountAmount = (
   }, [providers, preDiscount]);
 
   const addNewProvider = useCallback(() => {
+    const getNewName = (run = 0) => {
+      const newName =
+        RANDOM_NAMES[Math.round(Math.random() * RANDOM_NAMES.length) - 1];
+
+      return providers.some(p => p.name === newName)
+        ? run <= 3
+          ? getNewName(run + 1)
+          : `${newName}2`
+        : newName;
+    };
     const newProvider = {
-      name: `emoney${providers.length + 1}`,
+      name: getNewName(),
       discountPercentage: (Math.round(Math.random() * 19) + 1) * 5,
       maxDiscountAmount: (Math.round(Math.random() * 19) + 1) * 2500
     };
@@ -170,6 +247,13 @@ const useMaxDiscountAmount = (
     setProviders(newProviders);
   };
 
+  const removeProvider = useCallback(
+    i => {
+      setProviders([...providers.slice(0, i), ...providers.slice(i + 1)]);
+    },
+    [providers]
+  );
+
   return {
     amount,
     index,
@@ -177,7 +261,8 @@ const useMaxDiscountAmount = (
     setPreDiscount,
     providers,
     addNewProvider,
-    updateProvider
+    updateProvider,
+    removeProvider
   };
 };
 
@@ -189,7 +274,8 @@ export default () => {
     setPreDiscount,
     providers,
     addNewProvider,
-    updateProvider
+    updateProvider,
+    removeProvider
   } = useMaxDiscountAmount();
 
   const onChangePreDiscount = raw => {
@@ -207,6 +293,7 @@ export default () => {
       bg="brand.400"
     >
       <Flex
+        as="main"
         maxWidth="100vw"
         width="32rem"
         flexDirection="column"
@@ -215,22 +302,33 @@ export default () => {
         boxShadow="0 0 16px 16px rgba(64,64,64,0.1)"
       >
         <Flex
+          as="section"
           alignItems="center"
           justifyContent="center"
           height="40vh"
-          bg="green.100"
+          background="radial-gradient(circle at bottom, #f0fff4, #c6f6d5, #9ae6b4)"
         >
-          <Flex alignItems="center" flexDirection="column">
+          <Flex
+            as="article"
+            width="100%"
+            alignItems="center"
+            flexDirection="column"
+          >
             <Heading
               textAlign="center"
               as="h1"
               size="sm"
               textTransform="uppercase"
+              fontWeight="light"
             >
-              Diskon Terbesar
+              Cashback Terbesar
             </Heading>
-            <Text fontSize="6xl" textAlign="center">
-              {amount}
+            <Text fontSize="6rem" textAlign="center" fontWeight="light">
+              {format(amount, {
+                thousandSeparator: ".",
+                decimalSeparator: "",
+                decimalsDigits: 0
+              })}
             </Text>
             <Badge
               variant="solid"
@@ -238,14 +336,15 @@ export default () => {
               mb="1rem"
               textAlign="center"
             >
-              {index === -1 ? "No Data" : providers[index].name}{" "}
+              {index !== -1 && providers[index] ? providers[index].name : ""}
             </Badge>
 
             <Flex
               flexGrow={1}
               flexDirection="row"
+              alignSelf="stretch"
               alignItems="flex-end"
-              justifyContent="space-between"
+              justifyContent="space-around"
             >
               <Flex flexDirection="column" alignItems="center" mx="1rem">
                 <Editable
@@ -257,11 +356,23 @@ export default () => {
                     textDecoration="line-through"
                     fontSize="lg"
                   />
-                  <EditableInput />
+                  <EditableInput textAlign="center" />
                 </Editable>
 
-                <Text textAlign="center" fontSize="xs">
+                <Text
+                  textAlign="center"
+                  fontSize="xs"
+                  textTransform="uppercase"
+                  opacity="0.75"
+                >
                   Harga sebelum
+                  <Box
+                    as={FiEdit3}
+                    display="inline"
+                    ml="0.5rem"
+                    position="relative"
+                    top="-1px"
+                  />
                 </Text>
               </Flex>
               <Flex
@@ -271,9 +382,18 @@ export default () => {
                 mx="1rem"
               >
                 <Text textAlign="center" fontSize="lg" fontWeight="bold">
-                  {preDiscount - amount}
+                  {format(preDiscount - amount, {
+                    thousandSeparator: ".",
+                    decimalSeparator: "",
+                    decimalsDigits: 0
+                  })}
                 </Text>
-                <Text textAlign="center" fontSize="xs">
+                <Text
+                  textAlign="center"
+                  fontSize="xs"
+                  textTransform="uppercase"
+                  opacity="0.75"
+                >
                   Total bayar
                 </Text>
               </Flex>
@@ -281,6 +401,7 @@ export default () => {
           </Flex>
         </Flex>
         <Flex
+          as="ul"
           flexDirection="row"
           overflowX="scroll"
           flexGrow={1}
@@ -289,34 +410,18 @@ export default () => {
           px={2}
         >
           {providers.map((provider, i) => (
-            <ProviderCard
-              key={`i${provider.name}`}
-              {...provider}
-              updateProvider={updateProvider(i)}
-              isCheapest={index === i}
-            />
+            <ListItem key={`${provider.name}${i}`}>
+              <ProviderCard
+                {...provider}
+                updateProvider={updateProvider(i)}
+                isCheapest={index === i}
+                onClose={() => {
+                  removeProvider(i);
+                }}
+              />
+            </ListItem>
           ))}
-
-          <Flex
-            flexDirection="column"
-            border="dashed 1px"
-            borderColor="black.200"
-            minWidth="12rem"
-            minHeight="12rem"
-            borderRadius={8}
-            alignItems="center"
-            justifyContent="center"
-            mx={2}
-          >
-            <IconButton
-              aria-label="Tambah provider"
-              icon="add"
-              onClick={addNewProvider}
-            />
-            <Text textAlign="center" mt={2}>
-              Tambah provider
-            </Text>
-          </Flex>
+          <AddProviderButton onClick={addNewProvider} />
         </Flex>
         <Box
           width="32rem"
@@ -327,23 +432,29 @@ export default () => {
           bottom="0"
           p={2}
           bg="white"
-          boxShadow="0 0 16px 16px rgba(64,64,64,0.1)"
+          boxShadow="0 0 16px 8px rgba(64,64,64,0.1)"
           borderRadius={8}
         >
           <Stack spacing={2}>
-            <Text textAlign="center" as="label">
-              Harga sebelum diskon
+            <Text
+              textAlign="center"
+              as="label"
+              textTransform="uppercase"
+              opacity="0.5"
+              fontWeight="light"
+              fontSize="sm"
+            >
+              Harga sebelum cashback
             </Text>
             <NumberInput
-              aria-label="Harga sebelum diskon"
+              aria-label="Harga sebelum cashback"
               defaultValue={0}
               value={preDiscount}
               onChange={onChangePreDiscount}
               min={0}
               step={500}
-              textAlign="center"
             >
-              <NumberInputField />
+              <NumberInputField textAlign="center" />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
