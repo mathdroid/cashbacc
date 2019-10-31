@@ -37,6 +37,8 @@ import { FiEdit3, FiTwitter } from "react-icons/fi";
 import { format } from "number-currency-format";
 import { NextSeo } from "next-seo";
 
+import * as gtag from "../utils/gtag";
+
 const usePreDiscountState = createPersistedState("prediscount");
 const useProvidersState = createPersistedState("providers");
 const useDiscountState = createPersistedState("discount");
@@ -382,13 +384,23 @@ export default () => {
             aria-label="Ganti mode warna"
             icon={colorMode === "light" ? "moon" : "sun"}
             variant="ghost"
-            onClick={toggleColorMode}
+            onClick={() => {
+              toggleColorMode();
+              gtag.event({
+                action: "toggle_color_mode"
+              });
+            }}
           />
           <IconButton
             aria-label="Informasi"
             icon="info-outline"
             variant="ghost"
-            onClick={onOpen}
+            onClick={() => {
+              onOpen();
+              gtag.event({
+                action: "open_modal"
+              });
+            }}
           />
         </Flex>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -442,8 +454,19 @@ export default () => {
                 >
                   Source Code <Icon name="external-link" ml="2px" />
                 </Link>
-                <Button leftIcon={FiTwitter} variant="outline" mr={2}>
-                  <Link href="https://twitter.com/intent/tweet?text=He attacc, he protecc, but most importantly, he calculate cashbacc&url=https://makantuhdiskon.com&via=mathdroid">Tweet</Link>
+                <Button
+                  leftIcon={FiTwitter}
+                  variant="outline"
+                  mr={2}
+                  onClick={() => {
+                    gtag.event({
+                      action: "share"
+                    });
+                  }}
+                >
+                  <Link href="https://twitter.com/intent/tweet?text=He attacc, he protecc, but most importantly, he calculate cashbacc&url=https://makantuhdiskon.com&via=mathdroid">
+                    Tweet
+                  </Link>
                 </Button>
                 <Button variantColor="gray" onClick={onClose}>
                   Tutup
