@@ -35,6 +35,7 @@ import { css } from "@emotion/core";
 import createPersistedState from "use-persisted-state";
 import { FiEdit3 } from "react-icons/fi";
 import { format } from "number-currency-format";
+import { NextSeo } from "next-seo";
 
 const usePreDiscountState = createPersistedState("prediscount");
 const useProvidersState = createPersistedState("providers");
@@ -152,7 +153,7 @@ const ProviderCard = ({
           fontWeight="bold"
           css={css`
             &:after {
-              opacity: 0.5;
+              opacity: 0.25;
               content: "%";
             }
           `}
@@ -215,6 +216,31 @@ const AddProviderButton = ({ onClick }) => {
     </Flex>
   );
 };
+
+const SEO = () => (
+  <NextSeo
+    title="Cashbacc"
+    description="He attacc, he protecc, but most importantly, he calculate cashbacc"
+    canonical="https://www.makantuhdiskon.com/"
+    openGraph={{
+      url: "https://www.makantuhdiskon.com",
+      title: "Cashbacc",
+      description:
+        "He attacc, he protecc, but most importantly, he calculate cashbacc",
+      images: [
+        {
+          url: "https://www.makantuhdiskon.com/image/og.png"
+        }
+      ],
+      site_name: "CashBacc"
+    }}
+    twitter={{
+      handle: "@mathdroid",
+      site: "@mathdroid",
+      cardType: "summary_large_image"
+    }}
+  />
+);
 
 const INITIAL_PRE_DISCOUNT = 0;
 const INITIAL_PROVIDERS = [];
@@ -332,275 +358,279 @@ export default () => {
   };
 
   return (
-    <Flex
-      minHeight="100vh"
-      width="100%"
-      flexDirection="row"
-      justifyContent="center"
-      bg="brand.400"
-    >
+    <>
+      <SEO />
       <Flex
-        as="header"
-        width="32rem"
-        maxWidth="100vw"
-        position="fixed"
-        top="0"
+        minHeight="100vh"
+        width="100%"
         flexDirection="row"
-        alignItems="center"
-        justifyContent="flex-end"
-      >
-        <IconButton
-          aria-label="Ganti mode warna"
-          icon={colorMode === "light" ? "moon" : "sun"}
-          variant="ghost"
-          onClick={toggleColorMode}
-        />
-        <IconButton
-          aria-label="Informasi"
-          icon="info-outline"
-          variant="ghost"
-          onClick={onOpen}
-        />
-      </Flex>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent color={colorMode === "light" ? "black" : "gray.50"}>
-          <ModalHeader>Cashbacc App</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody display="flex" flexDirection="column">
-            <Text fontWeight="bold" mb="1rem">
-              Terimakasih untuk menggunakan Cashbacc!
-            </Text>
-            <Text>
-              Saya membuat Cashbacc karena banyaknya promosi cashback dari
-              berbagai merk pembayaran elektronik dengan jumlah total yang agak
-              membingungkan 😅 40% dengan maks 10000, 25% maks 12500, dll.
-            </Text>
-
-            <Text mt={2}>
-              Dengan aplikasi ini kita dapat membandingkan berbagai promo
-              tersebut dan mendapatkan jumlah promosi terbesar, tanpa
-              repot-repot menghitung 😇
-            </Text>
-
-            <Text mt={2}>
-              Semoga alat ini bisa membantu, dan apabila ada saran/keluhan, saya
-              bisa dihubungi di{" "}
-              <Link href="https://twitter.com/mathdroid" isExternal>
-                sini <Icon name="external-link" mx="2px" />
-              </Link>
-            </Text>
-
-            <Text mt={2}>Ttd,</Text>
-            <Text mt={4} fontWeight="bold">
-              mathdroid
-            </Text>
-            <Avatar
-              alignSelf="flex-end"
-              size="xl"
-              name="Muhammad Mustadi"
-              src="/image/photo.jpg"
-            />
-          </ModalBody>
-
-          <ModalFooter>
-            <Flex flexDirection="row" alignItems="center">
-              <Link
-                href="https://github.com/mathdroid/cashbacc"
-                isExternal
-                mr={2}
-              >
-                Source Code <Icon name="external-link" mx="2px" />
-              </Link>
-              <Button variantColor="gray" onClick={onClose}>
-                Tutup
-              </Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      <Flex
-        as="main"
-        maxWidth="100vw"
-        width="32rem"
-        flexDirection="column"
-        bg={colorMode === "light" ? "white" : "gray.900"}
-        border="black.400"
-        boxShadow="0 0 16px 16px rgba(64,64,64,0.1)"
+        justifyContent="center"
+        bg="brand.400"
       >
         <Flex
-          as="section"
+          as="header"
+          width="32rem"
+          maxWidth="100vw"
+          position="fixed"
+          top="0"
+          flexDirection="row"
           alignItems="center"
-          justifyContent="center"
-          height="40vh"
-          background={
-            colorMode === "light"
-              ? "radial-gradient(circle at bottom, #f0fff4, #c6f6d5, #9ae6b4)"
-              : "radial-gradient(circle at bottom, #2D3748, #1A202C, #171923)"
-          }
-          color={colorMode === "light" ? "black" : "gray.50"}
+          justifyContent="flex-end"
+        >
+          <IconButton
+            aria-label="Ganti mode warna"
+            icon={colorMode === "light" ? "moon" : "sun"}
+            variant="ghost"
+            onClick={toggleColorMode}
+          />
+          <IconButton
+            aria-label="Informasi"
+            icon="info-outline"
+            variant="ghost"
+            onClick={onOpen}
+          />
+        </Flex>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent color={colorMode === "light" ? "black" : "gray.50"}>
+            <ModalHeader>Cashbacc App</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody display="flex" flexDirection="column">
+              <Text fontWeight="bold" mb="1rem">
+                Terimakasih untuk menggunakan Cashbacc!
+              </Text>
+              <Text>
+                Saya membuat Cashbacc karena banyaknya promosi cashback dari
+                berbagai merk pembayaran elektronik dengan jumlah total yang
+                agak membingungkan 😅 40% dengan maks 10000, 25% maks 12500,
+                dll.
+              </Text>
+
+              <Text mt={2}>
+                Dengan aplikasi ini kita dapat membandingkan berbagai promo
+                tersebut dan mendapatkan jumlah promosi terbesar, tanpa
+                repot-repot menghitung 😇
+              </Text>
+
+              <Text mt={2}>
+                Semoga alat ini bisa membantu, dan apabila ada saran/keluhan,
+                saya bisa dihubungi di{" "}
+                <Link href="https://twitter.com/mathdroid" isExternal>
+                  sini <Icon name="external-link" mx="2px" />
+                </Link>
+              </Text>
+
+              <Text mt={2}>Ttd,</Text>
+              <Text mt={4} fontWeight="bold">
+                mathdroid
+              </Text>
+              <Avatar
+                alignSelf="flex-end"
+                size="xl"
+                name="Muhammad Mustadi"
+                src="/image/photo.jpg"
+              />
+            </ModalBody>
+
+            <ModalFooter>
+              <Flex flexDirection="row" alignItems="center">
+                <Link
+                  href="https://github.com/mathdroid/cashbacc"
+                  isExternal
+                  mr={2}
+                >
+                  Source Code <Icon name="external-link" mx="2px" />
+                </Link>
+                <Button variantColor="gray" onClick={onClose}>
+                  Tutup
+                </Button>
+              </Flex>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Flex
+          as="main"
+          maxWidth="100vw"
+          width="32rem"
+          flexDirection="column"
+          bg={colorMode === "light" ? "white" : "gray.900"}
+          border="black.400"
+          boxShadow="0 0 16px 16px rgba(64,64,64,0.1)"
         >
           <Flex
-            as="article"
-            width="100%"
+            as="section"
             alignItems="center"
-            flexDirection="column"
+            justifyContent="center"
+            height="40vh"
+            background={
+              colorMode === "light"
+                ? "radial-gradient(circle at bottom, #f0fff4, #c6f6d5, #9ae6b4)"
+                : "radial-gradient(circle at bottom, #2D3748, #1A202C, #171923)"
+            }
+            color={colorMode === "light" ? "black" : "gray.50"}
           >
-            <Heading
-              textAlign="center"
-              as="h1"
-              size="sm"
-              textTransform="uppercase"
-              fontWeight="light"
-            >
-              Cashback Terbesar
-            </Heading>
-            <Text fontSize="6rem" textAlign="center" fontWeight="light">
-              {format(amount, {
-                thousandSeparator: ".",
-                decimalSeparator: "",
-                decimalsDigits: 0
-              })}
-            </Text>
-            <Badge
-              variant="solid"
-              variantColor="green"
-              mb="1rem"
-              textAlign="center"
-            >
-              {index !== -1 && providers[index] ? providers[index].name : ""}
-            </Badge>
-
             <Flex
-              flexGrow={1}
-              flexDirection="row"
-              alignSelf="stretch"
-              alignItems="flex-end"
-              justifyContent="space-around"
+              as="article"
+              width="100%"
+              alignItems="center"
+              flexDirection="column"
             >
-              <Flex flexDirection="column" alignItems="center" mx="1rem">
-                <Editable
-                  value={preDiscount}
-                  onChange={onChangePreDiscount}
-                  placeholder="0"
-                >
-                  <EditablePreview
-                    textDecoration="line-through"
-                    fontSize="lg"
-                  />
-                  <EditableInput textAlign="center" />
-                </Editable>
-
-                <Text
-                  textAlign="center"
-                  fontSize="xs"
-                  textTransform="uppercase"
-                  opacity="0.75"
-                >
-                  Harga sebelum
-                  <Box
-                    as={FiEdit3}
-                    display="inline"
-                    ml="0.5rem"
-                    position="relative"
-                    top="-1px"
-                  />
-                </Text>
-              </Flex>
-              <Flex
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="flex-end"
-                mx="1rem"
+              <Heading
+                textAlign="center"
+                as="h1"
+                size="sm"
+                textTransform="uppercase"
+                fontWeight="light"
               >
-                <Text textAlign="center" fontSize="lg" fontWeight="bold">
-                  {format(preDiscount - amount, {
-                    thousandSeparator: ".",
-                    decimalSeparator: "",
-                    decimalsDigits: 0
-                  })}
-                </Text>
-                <Text
-                  textAlign="center"
-                  fontSize="xs"
-                  textTransform="uppercase"
-                  opacity="0.75"
+                Cashback Terbesar
+              </Heading>
+              <Text fontSize="6rem" textAlign="center" fontWeight="light">
+                {format(amount, {
+                  thousandSeparator: ".",
+                  decimalSeparator: "",
+                  decimalsDigits: 0
+                })}
+              </Text>
+              <Badge
+                variant="solid"
+                variantColor="green"
+                mb="1rem"
+                textAlign="center"
+              >
+                {index !== -1 && providers[index] ? providers[index].name : ""}
+              </Badge>
+
+              <Flex
+                flexGrow={1}
+                flexDirection="row"
+                alignSelf="stretch"
+                alignItems="flex-end"
+                justifyContent="space-around"
+              >
+                <Flex flexDirection="column" alignItems="center" mx="1rem">
+                  <Editable
+                    value={preDiscount}
+                    onChange={onChangePreDiscount}
+                    placeholder="0"
+                  >
+                    <EditablePreview
+                      textDecoration="line-through"
+                      fontSize="lg"
+                    />
+                    <EditableInput textAlign="center" />
+                  </Editable>
+
+                  <Text
+                    textAlign="center"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                    opacity="0.75"
+                  >
+                    Harga sebelum
+                    <Box
+                      as={FiEdit3}
+                      display="inline"
+                      ml="0.5rem"
+                      position="relative"
+                      top="-1px"
+                    />
+                  </Text>
+                </Flex>
+                <Flex
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  mx="1rem"
                 >
-                  Total bayar
-                </Text>
+                  <Text textAlign="center" fontSize="lg" fontWeight="bold">
+                    {format(preDiscount - amount, {
+                      thousandSeparator: ".",
+                      decimalSeparator: "",
+                      decimalsDigits: 0
+                    })}
+                  </Text>
+                  <Text
+                    textAlign="center"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                    opacity="0.75"
+                  >
+                    Total bayar
+                  </Text>
+                </Flex>
               </Flex>
             </Flex>
           </Flex>
+          <Flex
+            as="ul"
+            flexDirection="row"
+            overflowX="scroll"
+            flexGrow={1}
+            mb="6rem"
+            alignItems="center"
+            px={2}
+          >
+            {providers.map((provider, i) => (
+              <ListItem key={`${provider.name}${i}`}>
+                <ProviderCard
+                  {...provider}
+                  updateProvider={updateProvider(i)}
+                  isCheapest={index === i}
+                  onClose={() => {
+                    removeProvider(i);
+                  }}
+                />
+              </ListItem>
+            ))}
+            <AddProviderButton onClick={addNewProvider} />
+          </Flex>
+          <Box
+            width="32rem"
+            maxWidth="100vw"
+            height="6rem"
+            bg={colorMode === "light" ? "white" : "gray.900"}
+            color={colorMode === "light" ? "black" : "gray.50"}
+            position="fixed"
+            bottom="0"
+            p={2}
+            boxShadow={
+              colorMode === "light" ? "0 0 16px 8px rgba(64,64,64,0.1)" : "none"
+            }
+            borderRadius="8px 8px 0 0"
+            borderStyle="solid"
+            borderWidth="1px"
+            borderColor={colorMode === "light" ? "transparent" : "white"}
+            borderBottomColor="transparent"
+          >
+            <Stack spacing={2}>
+              <Text
+                textAlign="center"
+                as="label"
+                textTransform="uppercase"
+                opacity="0.5"
+                fontWeight="light"
+                fontSize="sm"
+              >
+                Harga sebelum cashback
+              </Text>
+              <NumberInput
+                aria-label="Harga sebelum cashback"
+                defaultValue={0}
+                value={preDiscount}
+                onChange={onChangePreDiscount}
+                min={0}
+                step={500}
+              >
+                <NumberInputField textAlign="center" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Stack>
+          </Box>
         </Flex>
-        <Flex
-          as="ul"
-          flexDirection="row"
-          overflowX="scroll"
-          flexGrow={1}
-          mb="6rem"
-          alignItems="center"
-          px={2}
-        >
-          {providers.map((provider, i) => (
-            <ListItem key={`${provider.name}${i}`}>
-              <ProviderCard
-                {...provider}
-                updateProvider={updateProvider(i)}
-                isCheapest={index === i}
-                onClose={() => {
-                  removeProvider(i);
-                }}
-              />
-            </ListItem>
-          ))}
-          <AddProviderButton onClick={addNewProvider} />
-        </Flex>
-        <Box
-          width="32rem"
-          maxWidth="100vw"
-          height="6rem"
-          bg={colorMode === "light" ? "white" : "gray.900"}
-          color={colorMode === "light" ? "black" : "gray.50"}
-          position="fixed"
-          bottom="0"
-          p={2}
-          boxShadow={
-            colorMode === "light" ? "0 0 16px 8px rgba(64,64,64,0.1)" : "none"
-          }
-          borderRadius="8px 8px 0 0"
-          borderStyle="solid"
-          borderWidth="1px"
-          borderColor={colorMode === "light" ? "transparent" : "white"}
-          borderBottomColor="transparent"
-        >
-          <Stack spacing={2}>
-            <Text
-              textAlign="center"
-              as="label"
-              textTransform="uppercase"
-              opacity="0.5"
-              fontWeight="light"
-              fontSize="sm"
-            >
-              Harga sebelum cashback
-            </Text>
-            <NumberInput
-              aria-label="Harga sebelum cashback"
-              defaultValue={0}
-              value={preDiscount}
-              onChange={onChangePreDiscount}
-              min={0}
-              step={500}
-            >
-              <NumberInputField textAlign="center" />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </Stack>
-        </Box>
       </Flex>
-    </Flex>
+    </>
   );
 };
