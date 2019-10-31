@@ -223,15 +223,15 @@ const SEO = () => (
   <NextSeo
     title="Cashbacc"
     description="He attacc, he protecc, but most importantly, he calculate cashbacc"
-    canonical="https://www.makantuhdiskon.com/"
+    canonical="https://makantuhdiskon.com/"
     openGraph={{
-      url: "https://www.makantuhdiskon.com",
+      url: "https://makantuhdiskon.com",
       title: "Cashbacc",
       description:
         "He attacc, he protecc, but most importantly, he calculate cashbacc",
       images: [
         {
-          url: "https://www.makantuhdiskon.com/image/og.png"
+          url: "https://makantuhdiskon.com/image/og.png"
         }
       ],
       site_name: "CashBacc"
