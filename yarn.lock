@@ -956,6 +956,13 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@pinjollist/next-with-analytics@^1.0.0-rc.0":
+  version "1.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@pinjollist/next-with-analytics/-/next-with-analytics-1.0.0-rc.0.tgz#8cace3df76d40860fccf5f28f94bcca190d013f3"
+  integrity sha512-gfgFw2jmbt9qIKuQV1a6Brlkkk+ywBg9fI+WhYepUHvzdgEzgnzrKKstq5vavMswwPna0mtvOQhlHAfUOKJg/g==
+  dependencies:
+    react-ga "^2.6.0"
+
 "@reach/alert@^0.1.2":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@reach/alert/-/alert-0.1.5.tgz#4da79add0055fa4295f51e5295ed3b80257e9153"
@@ -5276,6 +5283,11 @@ react-focus-lock@^2.1.0:
     react-clientside-effect "^1.2.2"
     use-callback-ref "^1.2.1"
     use-sidecar "^1.0.1"
+
+react-ga@^2.6.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.7.0.tgz#24328f157f31e8cffbf4de74a3396536679d8d7c"
+  integrity sha512-AjC7UOZMvygrWTc2hKxTDvlMXEtbmA0IgJjmkhgmQQ3RkXrWR11xEagLGFGaNyaPnmg24oaIiaNPnEoftUhfXA==
 
 react-icons@^3.8.0:
   version "3.8.0"

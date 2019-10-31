@@ -1,12 +1,21 @@
 import App from "next/app";
 import Head from "next/head";
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
+import { initAnalytics } from "@pinjollist/next-with-analytics";
 
 import theme from "../theme";
 
+const options = {
+  trackingCode: process.env.GOOGLE_ANALYTICS || "",
+  respectDNT: true
+};
+
+const analyticsInstance = initAnalytics(options);
+
 class EnhancedApp extends App {
   render() {
-    const { Component } = this.props;
+    const { Component, pageProps } = this.props;
+    const { analytics } = analyticsInstance;
     return (
       <>
         <Head>
@@ -32,7 +41,7 @@ class EnhancedApp extends App {
         <ThemeProvider theme={theme}>
           <CSSReset />
           <ColorModeProvider>
-            <Component />
+            <Component analytics={analytics} {...pageProps} />
           </ColorModeProvider>
         </ThemeProvider>
       </>

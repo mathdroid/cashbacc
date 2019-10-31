@@ -12,6 +12,7 @@
     "@chakra-ui/core": "^0.4.1",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
+    "@pinjollist/next-with-analytics": "^1.0.0-rc.0",
     "emotion-theming": "^10.0.19",
     "next": "latest",
     "next-offline": "4.0.6",

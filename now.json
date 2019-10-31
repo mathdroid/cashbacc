@@ -16,5 +16,8 @@
       "src": "next.config.js",
       "use": "@now/next"
     }
-  ]
+  ],
+  "env": {
+    "GOOGLE_ANALYTICS": "@google_analytics"
+  }
 }
