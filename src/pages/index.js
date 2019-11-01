@@ -613,6 +613,7 @@ export default () => {
           </Flex>
           <Flex
             as="ul"
+            listStyleType="none"
             flexDirection="row"
             overflowX="scroll"
             flexGrow={1}
