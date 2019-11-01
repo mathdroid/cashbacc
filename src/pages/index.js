@@ -512,7 +512,7 @@ export default () => {
             as="section"
             alignItems="center"
             justifyContent="center"
-            height="40vh"
+            minHeight="40vh"
             background={
               colorMode === "light"
                 ? "radial-gradient(circle at bottom, #f0fff4, #c6f6d5, #9ae6b4)"

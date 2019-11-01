@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "alias": "makantuhdiskon.com",
+  "alias": ["cashba.cc", "makantuhdiskon.com"],
   "env": {
     "GA_TRACKING_ID": "@ga-tracking-id"
   },
