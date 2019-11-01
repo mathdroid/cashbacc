@@ -1,8 +1,11 @@
 const withOffline = require("next-offline");
 
+console.log(process.env);
 const nextConfig = {
-  env: process.env.GOOGLE_ANALYTICS || "",
   target: "serverless",
+  env: {
+    GA_TRACKING_ID: process.env.GA_TRACKING_ID
+  },
   transformManifest: manifest => ["/"].concat(manifest), // add the homepage to the cache
   // Trying to set NODE_ENV=production when running yarn dev causes a build-time error so we
   // turn on the SW in dev mode so that we can actually test it

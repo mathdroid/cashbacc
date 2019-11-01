@@ -1,6 +1,14 @@
 {
-  "alias": "makantuhdiskon.com",
   "version": 2,
+  "alias": "makantuhdiskon.com",
+  "env": {
+    "GA_TRACKING_ID": "@ga-tracking-id"
+  },
+  "build": {
+    "env": {
+      "GA_TRACKING_ID": "@ga-tracking-id"
+    }
+  },
   "routes": [
     {
       "src": "^/service-worker.js$",
@@ -16,8 +24,5 @@
       "src": "next.config.js",
       "use": "@now/next"
     }
-  ],
-  "env": {
-    "GOOGLE_ANALYTICS": "@google_analytics"
-  }
+  ]
 }

@@ -7,6 +7,8 @@ import theme from "../theme";
 
 import * as gtag from "../utils/gtag";
 
+console.log(gtag.GA_TRACKING_ID);
+
 Router.events.on("routeChangeComplete", url => gtag.pageview(url));
 
 class EnhancedApp extends App {

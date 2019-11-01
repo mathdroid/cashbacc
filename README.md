@@ -1,4 +1,12 @@
-# Cashback Calculator
+# Cashbacc
+
+> He attacc, he protecc, but most importantly, he calculate cashbacc
+
+https://odi.wtf/cashback
+
+## Motivation
+
+There are a lot of cashback promos from e-money provider, with convoluted discount percentage and max amount of discount. This app helps you calculate the most cashback you can get in an instant.
 
 ## Usage
 
@@ -10,7 +18,7 @@ $ yarn dev
 
 The MIT License (MIT)
 
-Copyright (c) 2019-present mathdroid.
+Copyright (c) 2019-present [mathdroid](https://twitter.com/mathdroid)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
