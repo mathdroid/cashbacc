@@ -16,6 +16,7 @@ import {
   EditableInput,
   Badge,
   CloseButton,
+  List,
   ListItem,
   useColorMode,
   useDisclosure,
@@ -611,9 +612,9 @@ export default () => {
               </Flex>
             </Flex>
           </Flex>
-          <Flex
-            as="ul"
-            listStyleType="none"
+          <List
+            display="flex"
+            styleType="none"
             flexDirection="row"
             overflowX="scroll"
             flexGrow={1}
@@ -622,7 +623,7 @@ export default () => {
             px={2}
           >
             {providers.map((provider, i) => (
-              <ListItem key={`${provider.name}${i}`}>
+              <ListItem key={`${provider.name}${i}`} listStyleType="none">
                 <ProviderCard
                   {...provider}
                   updateProvider={updateProvider(i)}
@@ -635,7 +636,7 @@ export default () => {
               </ListItem>
             ))}
             <AddProviderButton onClick={addNewProvider} />
-          </Flex>
+          </List>
           <Box
             width="32rem"
             maxWidth="100vw"
