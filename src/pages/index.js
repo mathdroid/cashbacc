@@ -231,15 +231,15 @@ const SEO = () => (
   <NextSeo
     title="Cashbacc"
     description="He attacc, he protecc, but most importantly, he calculate cashbacc"
-    canonical="https://makantuhdiskon.com/"
+    canonical="https://cashba.cc/"
     openGraph={{
-      url: "https://makantuhdiskon.com",
+      url: "https://cashba.cc",
       title: "Cashbacc",
       description:
         "He attacc, he protecc, but most importantly, he calculate cashbacc",
       images: [
         {
-          url: "https://makantuhdiskon.com/image/og.png"
+          url: "https://cashba.cc/image/og.png"
         }
       ],
       site_name: "CashBacc"
@@ -486,7 +486,7 @@ export default () => {
                     });
                   }}
                 >
-                  <Link href="https://twitter.com/intent/tweet?text=He attacc, he protecc, but most importantly, he calculate cashbacc&url=https://makantuhdiskon.com&via=mathdroid">
+                  <Link href="https://twitter.com/intent/tweet?text=He attacc, he protecc, but most importantly, he calculate cashbacc&url=https://cashba.cc&via=mathdroid">
                     Tweet
                   </Link>
                 </Button>
