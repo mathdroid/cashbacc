@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "alias": ["cashba.cc", "makantuhdiskon.com"],
+  "alias": ["cashba.cc"],
   "env": {
-    "GA_TRACKING_ID": "@ga-tracking-id"
+    "GA_TRACKING_ID": "@ga-tracking-id",
+    "CASHBACC_FIREBASE_CLIENT_BASE64": "@cashbacc-firebase-client-base64"
   },
   "build": {
     "env": {
-      "GA_TRACKING_ID": "@ga-tracking-id"
+      "GA_TRACKING_ID": "@ga-tracking-id",
+      "CASHBACC_FIREBASE_CLIENT_BASE64": "@cashbacc-firebase-client-base64"
     }
   },
   "routes": [

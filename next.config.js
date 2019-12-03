@@ -1,10 +1,15 @@
+const dotenv = require("dotenv");
 const withOffline = require("next-offline");
 
-console.log(process.env);
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
 const nextConfig = {
   target: "serverless",
   env: {
-    GA_TRACKING_ID: process.env.GA_TRACKING_ID
+    GA_TRACKING_ID: process.env.GA_TRACKING_ID,
+    CASHBACC_FIREBASE_CLIENT_BASE64: process.env.CASHBACC_FIREBASE_CLIENT_BASE64
   },
   transformManifest: manifest => ["/"].concat(manifest), // add the homepage to the cache
   // Trying to set NODE_ENV=production when running yarn dev causes a build-time error so we

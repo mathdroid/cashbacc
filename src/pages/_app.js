@@ -2,12 +2,24 @@ import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
+import firebase from "firebase/app";
 
 import theme from "../theme";
 
 import * as gtag from "../utils/gtag";
 
-console.log(gtag.GA_TRACKING_ID);
+try {
+  const clientCredentialsJSON = Buffer.from(
+    process.env.CASHBACC_FIREBASE_CLIENT_BASE64,
+    "base64"
+  ).toString();
+  const clientCredentials = JSON.parse(clientCredentialsJSON);
+  firebase.initializeApp(clientCredentials);
+} catch (error) {
+  if (error.code !== "app/duplicate-app") {
+    throw error;
+  }
+}
 
 Router.events.on("routeChangeComplete", url => gtag.pageview(url));
 
