@@ -36,7 +36,9 @@ import {
   Avatar,
   Link,
   Icon,
-  Input
+  Input,
+  InputGroup,
+  InputLeftAddon
 } from "@chakra-ui/core";
 import { css } from "@emotion/core";
 import createPersistedState from "use-persisted-state";
@@ -405,7 +407,7 @@ export default () => {
       );
       firebase
         .auth()
-        .signInWithPhoneNumber(phoneNumber, applicationVerifier)
+        .signInWithPhoneNumber(`+62${phoneNumber}`, applicationVerifier)
         .then(async confirmationResult => {
           toggleOtpInput();
           setConfirmationResult(confirmationResult);
@@ -499,11 +501,12 @@ export default () => {
                 </>
               ) : (
                 <>
-                  <Input
-                    placeholder="phone number"
+                 <InputGroup>
+    <InputLeftAddon children="+62" />
+    <Input type="phone" roundedLeft="0" placeholder="phone number"
                     value={phoneNumber}
-                    onChange={handlePhoneNumberChange}
-                  />
+                    onChange={handlePhoneNumberChange} />
+  </InputGroup>
                   {shouldShowOtpInput && (
                     <Input
                       placeholder="OTP"
