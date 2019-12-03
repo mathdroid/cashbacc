@@ -1,4 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 import {
   Flex,
   Text,
@@ -30,7 +35,8 @@ import {
   Button,
   Avatar,
   Link,
-  Icon
+  Icon,
+  Input
 } from "@chakra-ui/core";
 import { css } from "@emotion/core";
 import createPersistedState from "use-persisted-state";
@@ -360,12 +366,68 @@ export default () => {
     removeProvider
   } = useMaxDiscountAmount();
 
+  const [user, initialising, error] = useAuthState(firebase.auth());
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [shouldShowOtpInput, setShouldShowOtpInput] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [confirmationResult, setConfirmationResult] = useState({});
+
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenLoginModal,
+    onOpen: onOpenLoginModal,
+    onClose: onCloseLoginModal
+  } = useDisclosure();
 
   const onChangePreDiscount = raw => {
     const value = parseInt(raw, 10);
     setPreDiscount(() => (value ? value : 0));
+  };
+
+  const toggleOtpInput = () => setShouldShowOtpInput(!shouldShowOtpInput);
+
+  const handlePhoneNumberChange = e => {
+    setPhoneNumber(e.target.value);
+  };
+
+  const handleOtpValueChange = e => {
+    setOtpValue(e.target.value);
+  };
+
+  const login = () => {
+    if (typeof document !== "undefined") {
+      const applicationVerifier = new firebase.auth.RecaptchaVerifier(
+        "login-button",
+        {
+          size: "invisible"
+        }
+      );
+      firebase
+        .auth()
+        .signInWithPhoneNumber(phoneNumber, applicationVerifier)
+        .then(async confirmationResult => {
+          toggleOtpInput();
+          setConfirmationResult(confirmationResult);
+        })
+        .catch(error => {
+          console.error({ error });
+        });
+    }
+  };
+
+  const logout = () => {
+    firebase.auth().signOut();
+    setShouldShowOtpInput(false);
+    setConfirmationResult({});
+    setOtpValue("");
+    setPhoneNumber("");
+  };
+
+  const confirmOtp = () => {
+    if (confirmationResult.confirm) {
+      confirmationResult.confirm(otpValue);
+    }
   };
 
   return (
@@ -410,7 +472,56 @@ export default () => {
               });
             }}
           />
+
+          <IconButton
+            aria-label="Log In"
+            icon="unlock"
+            variant="ghost"
+            onClick={() => {
+              onOpenLoginModal();
+            }}
+          />
         </Flex>
+        <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
+          <ModalOverlay />
+          <ModalContent color={colorMode === "light" ? "black" : "gray.50"}>
+            <ModalHeader>Log In</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody display="flex" flexDirection="column">
+              {initialising ? (
+                <Text>Initialising User...</Text>
+              ) : error ? (
+                <Text>Error: {error}</Text>
+              ) : user ? (
+                <>
+                  <Text>Current User: {user.uid}</Text>
+                  <Button onClick={logout}>Log out</Button>
+                </>
+              ) : (
+                <>
+                  <Input
+                    placeholder="phone number"
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                  />
+                  {shouldShowOtpInput && (
+                    <Input
+                      placeholder="OTP"
+                      value={otpValue}
+                      onChange={handleOtpValueChange}
+                    />
+                  )}
+                  <Button
+                    onClick={shouldShowOtpInput ? confirmOtp : login}
+                    id="login-button"
+                  >
+                    {shouldShowOtpInput ? "confirm OTP" : "log in"}
+                  </Button>
+                </>
+              )}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent color={colorMode === "light" ? "black" : "gray.50"}>
